@@ -1,0 +1,10 @@
+vlan database
+vlan 10 name VLAN10
+vlan 20 name VLAN20
+
+# CONF
+int f1/0
+switchport mode trunk
+int f1/1
+switchport mode trunk
+
