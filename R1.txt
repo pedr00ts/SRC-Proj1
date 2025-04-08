@@ -10,10 +10,4 @@ int f0/0
 ip add 10.0.0.13 255.255.255.252
 ip ospf 1 area 0
 no shut
-int f0/1
-ip add 10.0.0.17 255.255.255.252
-ip ospf 1 area 0
-no shut
-ip route 0.0.0.0 0.0.0.0 10.0.0.1
-
 
