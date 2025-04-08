@@ -1,0 +1,6 @@
+set interfaces ethernet eth0 address 10.0.0.14/30
+set interfaces ethernet eth1 address 10.0.0.22/30
+set interfaces ethernet eth2 address 10.0.0.33/30
+set interfaces ethernet eth3 address 10.0.0.37/30
+set protocols ospf area 0 network 10.0.0.12/30
+set protocols ospf area 0 network 10.0.0.20/30

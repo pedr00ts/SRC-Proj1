@@ -1,5 +1,3 @@
 set interfaces ethernet eth0 address 10.0.0.34/30
-set interfaces ethernet eth1 address 10.0.0.42/30
 set interfaces ethernet eth2 address 200.0.0.1/24
 set interfaces ethernet eth3 address 10.0.0.49/30
-set interfaces ethernet eth4 address 10.0.0.53/30

@@ -3,8 +3,39 @@ vlan 10 name VLAN10
 vlan 20 name VLAN20
 
 # CONF
+ip routing
 int f1/0
 switchport mode trunk
-int f1/1
-switchport mode trunk
+int f0/0
+ip add 10.0.0.110 255.255.255.252
+no shut
+ip ospf 1 area 0
+int vlan 10
+no autostate
+ip add 10.10.0.1 255.255.255.0
+ip ospf 1 area 0
+no shut
+int vlan 20
+no autostate
+ip add 10.20.0.1 255.255.255.0
+ip ospf 1 area 0
+no shut
+exit
+
+ip access-list extended VLAN10_TO_20
+ permit ip 10.10.0.0 0.0.0.255 10.20.0.0 0.0.0.255
+
+route-map REROUTE_VLAN10 permit 10
+ match ip address VLAN10_TO_20
+ set ip next-hop 10.0.0.109
+
+ ip access-list extended VLAN20_TO_10
+ permit ip 10.20.0.0 0.0.0.255 10.10.0.0 0.0.0.255
+
+route-map REROUTE_VLAN20 permit 20
+ match ip address VLAN20_TO_10
+ set ip next-hop 10.0.0.109
+
+
+
 

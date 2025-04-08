@@ -3,10 +3,6 @@ int f0/0
 ip add 10.0.0.70 255.255.255.252
 ip ospf 1 area 0
 no shut
-int f0/1
-ip add 10.0.0.78 255.255.255.252
-ip ospf 1 area 0
-no shut
 int f1/0
 no switchport
 ip add 10.0.0.89 255.255.255.252

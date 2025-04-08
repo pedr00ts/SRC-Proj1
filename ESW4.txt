@@ -2,6 +2,6 @@ ip routing
 int f1/0
 switchport mode trunk
 int f0/0
-ip add 10.0.0.110 255.255.255.252
+ip add 10.0.0.106 255.255.255.252
 ip ospf 1 area 0
 no shut
