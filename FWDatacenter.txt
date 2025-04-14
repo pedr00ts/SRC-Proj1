@@ -4,3 +4,5 @@ set interfaces ethernet eth2 address 10.0.0.102/30
 set protocols ospf area 0 network 10.0.0.104/30
 set protocols ospf area 0 network 10.0.0.92/30
 set protocols ospf area 0 network 10.0.0.100/30
+set interfaces loopback lo address 10.0.0.209/32
+set protocols ospf area 0 network 10.0.0.209/32

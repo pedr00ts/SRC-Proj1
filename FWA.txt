@@ -1,3 +1,18 @@
 set interfaces ethernet eth0 address 10.0.0.34/30
 set interfaces ethernet eth2 address 10.0.0.113/30
 set interfaces ethernet eth3 address 10.0.0.49/30
+set interfaces loopback lo address 10.0.0.204/32
+set protocols ospf area 0 network 10.0.0.204/32
+
+set protocols static route 200.0.0.0/24 next-hop 10.0.0.114
+set protocols static route 10.0.0.0/8 next-hop 10.0.0.50
+set protocols static route 10.0.0.203/32 next-hop 10.0.0.114
+set protocols static route 0.0.0.0/0 next-hop 10.0.0.33
+
+## NAT (ainda não configurado)
+##set nat source rule 100 outbound-interface eth0
+##set nat source rule 100 source address 10.0.0.0/8
+##set nat source rule 100 translation address 192.1.0.1-192.1.0.50
+##set nat source rule 110 outbound-interface eth2
+##set nat source rule 110 source address 10.0.0.0/8
+##set nat source rule 110 translation address 192.1.0.51-192.1.0.100#

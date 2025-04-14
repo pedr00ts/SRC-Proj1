@@ -20,6 +20,9 @@ no autostate
 ip add 10.20.0.1 255.255.255.0
 ip ospf 1 area 0
 no shut
+int Lo0
+ip add 10.0.0.210 255.255.255.255
+ip ospf 1 area 0
 exit
 
 ip access-list extended VLAN10_TO_20
@@ -43,7 +46,5 @@ route-map REROUTE_VLAN20 permit 20
  interface vlan 20
  ip policy route-map REROUTE_VLAN20
  exit
-
-
 
 

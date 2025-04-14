@@ -4,3 +4,14 @@ set interfaces ethernet eth2 address 10.0.0.33/30
 set interfaces ethernet eth3 address 10.0.0.37/30
 set protocols ospf area 0 network 10.0.0.12/30
 set protocols ospf area 0 network 10.0.0.20/30
+set interfaces loopback lo address 10.0.0.201/32
+set protocols ospf area 0 network 10.0.0.201/32
+
+set load-balancing wan interface-health eth2 nexthop 10.0.0.34
+set load-balancing wan interface-health eth3 nexthop 10.0.0.38
+set load-balancing wan rule 1 inbound-interface eth0
+set load-balancing wan rule 1 inbound-interface eth1
+set load-balancing wan rule 1 interface eth2 weight 1
+set load-balancing wan rule 1 interface eth3 weight 1
+set load-balancing wan sticky-connections inbound
+set load-balancing wan disable-source-nat

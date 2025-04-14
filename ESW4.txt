@@ -5,3 +5,6 @@ int f0/0
 ip add 10.0.0.106 255.255.255.252
 ip ospf 1 area 0
 no shut
+int Lo0
+ip add 10.0.0.211 255.255.255.255
+ip ospf 1 area 0
