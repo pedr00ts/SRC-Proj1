@@ -19,6 +19,10 @@ int vlan 20
 no autostate
 ip add 10.20.0.1 255.255.255.0
 ip ospf 1 area 0
+int vlan 1 
+no autostate
+ip add 10.0.1.1 255.255.255.0
+ip ospf 1 area 0
 no shut
 int Lo0
 ip add 10.0.0.210 255.255.255.255
