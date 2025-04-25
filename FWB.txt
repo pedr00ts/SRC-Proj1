@@ -20,3 +20,110 @@ set nat source rule 100 translation address 10.0.100.51-10.0.100.100
 set nat source rule 110 outbound-interface eth2
 set nat source rule 110 source address 10.0.0.0/8
 set nat source rule 110 translation address 10.0.100.151-10.0.100.200
+
+
+set zone-policy zone INSIDE description "Inside (Internal Network)"
+set zone-policy zone INSIDE interface eth3
+set zone-policy zone DMZ description "DMZ (Server Farm)"
+set zone-policy zone DMZ interface eth2
+set zone-policy zone OUTSIDE description "Outside (Internet)"
+set zone-policy zone OUTSIDE interface eth0
+
+
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 20 description "Internet Access - TCP"
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 20 action accept
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 20 protocol tcp
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 20 destination port '80,443'
+
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 21 description "Internet Access - UDP"
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 21 action accept
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 21 protocol udp
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 21 destination port '80,443'
+
+
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 60 description "ADM ICMP"
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 60 action accept
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 60 protocol icmp
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 60 icmp type 8
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 60 source address 10.0.1.100
+
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 61 description "ADM SSH"
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 61 action accept
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 61 protocol tcp
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 61 destination port 22
+set firewall name FROM-INSIDE-TO-OUTSIDE rule 61 source address 10.0.1.100
+
+
+set firewall name TO-INSIDE rule 10 description "Accept Established-Related Connections"
+set firewall name TO-INSIDE rule 10 action accept
+set firewall name TO-INSIDE rule 10 state established enable
+set firewall name TO-INSIDE rule 10 state related enable
+
+
+set firewall name TO-DMZ rule 30 description "DMZ Web Access - TCP"
+set firewall name TO-DMZ rule 30 action accept
+set firewall name TO-DMZ rule 30 protocol tcp
+set firewall name TO-DMZ rule 30 destination port 443
+set firewall name TO-DMZ rule 30 destination address 200.0.0.10
+
+set firewall name TO-DMZ rule 31 description "DMZ Web Access - UDP"
+set firewall name TO-DMZ rule 31 action accept
+set firewall name TO-DMZ rule 31 protocol udp
+set firewall name TO-DMZ rule 31 destination port 443
+set firewall name TO-DMZ rule 31 destination address 200.0.0.11
+
+set firewall name TO-DMZ rule 32 description "DMZ E-mail Access"
+set firewall name TO-DMZ rule 32 action accept
+set firewall name TO-DMZ rule 32 protocol tcp
+set firewall name TO-DMZ rule 32 destination port '1993,1025'
+set firewall name TO-DMZ rule 32 destination address 200.0.0.20
+
+set firewall name TO-DMZ rule 33 description "DMZ DNS Access"
+set firewall name TO-DMZ rule 33 action accept
+set firewall name TO-DMZ rule 33 protocol udp
+set firewall name TO-DMZ rule 33 destination port 53
+set firewall name TO-DMZ rule 33 destination address 200.0.0.30
+
+set firewall name TO-DMZ rule 34 description "Accept Established-Related Connections"
+set firewall name TO-DMZ rule 34 action accept
+set firewall name TO-DMZ rule 34 state established enable
+set firewall name TO-DMZ rule 34 state related enable
+set firewall name TO-DMZ rule 34 destination address 200.0.0.0/24
+
+set firewall name TO-DMZ rule 60 description "ADM ICMP"
+set firewall name TO-DMZ rule 60 action accept
+set firewall name TO-DMZ rule 60 protocol icmp
+set firewall name TO-DMZ rule 60 icmp type 8
+set firewall name TO-DMZ rule 60 source address 10.0.1.100
+set firewall name TO-DMZ rule 60 destination address 10.0.0.203/32
+
+set firewall name TO-DMZ rule 61 description "ADM SSH"
+set firewall name TO-DMZ rule 61 action accept
+set firewall name TO-DMZ rule 61 protocol tcp
+set firewall name TO-DMZ rule 61 destination port 22
+set firewall name TO-DMZ rule 61 source address 10.0.1.100
+set firewall name TO-DMZ rule 61 destination address 10.0.0.203/32
+
+
+set firewall name FROM-DMZ-TO-OUTSIDE rule 20 description "DMZ Internet Access - TCP"
+set firewall name FROM-DMZ-TO-OUTSIDE rule 20 action accept
+set firewall name FROM-DMZ-TO-OUTSIDE rule 20 protocol tcp
+set firewall name FROM-DMZ-TO-OUTSIDE rule 20 destination port '80,443'
+
+set firewall name FROM-DMZ-TO-OUTSIDE rule 21 description "DMZ Internet Access - UDP"
+set firewall name FROM-DMZ-TO-OUTSIDE rule 21 action accept
+set firewall name FROM-DMZ-TO-OUTSIDE rule 21 protocol udp
+set firewall name FROM-DMZ-TO-OUTSIDE rule 21 destination port '80,443'
+
+set firewall name FROM-DMZ-TO-OUTSIDE rule 22 description "Accept Established-Related Connections"
+set firewall name FROM-DMZ-TO-OUTSIDE rule 22 action accept
+set firewall name FROM-DMZ-TO-OUTSIDE rule 22 state established enable
+set firewall name FROM-DMZ-TO-OUTSIDE rule 22 state related enable
+
+
+set zone-policy zone INSIDE from OUTSIDE firewall name TO-INSIDE
+set zone-policy zone INSIDE from DMZ firewall name TO-INSIDE
+set zone-policy zone DMZ from OUTSIDE firewall name TO-DMZ
+set zone-policy zone DMZ from INSIDE firewall name TO-DMZ
+set zone-policy zone OUTSIDE from INSIDE firewall name FROM-INSIDE-TO-OUTSIDE
+set zone-policy zone OUTSIDE from DMZ firewall name FROM-DMZ-TO-OUTSIDE

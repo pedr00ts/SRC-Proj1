@@ -1,0 +1,9 @@
+no ip routing
+interface f0/0
+ip address 100.0.0.200 255.255.255.128
+no shut
+ip default-gateway 100.0.0.129
+ip http secure-port 443
+ip http secure-server
+ip http port 80
+ip http server

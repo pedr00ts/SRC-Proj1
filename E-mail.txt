@@ -1,1 +1,8 @@
-ip 200.0.0.20/24 200.0.0.1
+no ip routing
+interface f0/0
+ip address 200.0.0.20 255.255.255.0
+no shut
+ip default-gateway 200.0.0.1
+ip http port 1993
+ip http port 1025
+ip http server

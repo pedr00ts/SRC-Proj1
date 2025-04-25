@@ -1,0 +1,7 @@
+no ip routing
+interface f0/0
+ip address 10.100.0.30 255.255.255.0
+no shut
+ip default-gateway 10.100.0.1
+ip http port 3306
+ip http server
