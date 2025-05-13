@@ -6,3 +6,56 @@ set protocols ospf area 0 network 10.0.0.92/30
 set protocols ospf area 0 network 10.0.0.100/30
 set interfaces loopback lo address 10.0.0.209/32
 set protocols ospf area 0 network 10.0.0.209/32
+
+
+set zone-policy zone CORE description "Core"
+set zone-policy zone CORE interface eth1
+set zone-policy zone CORE interface eth2
+set zone-policy zone DATACENTER description "Datacenter"
+set zone-policy zone DATACENTER interface eth0
+
+set firewall group address-group VLAN-USERS address 10.10.0.0-10.10.0.255
+set firewall group address-group VLAN-USERS address 10.20.0.0-10.20.0.255
+
+
+set firewall name TO-CORE default-action drop
+
+set firewall name TO-CORE rule 10 description "Accept Established-Related Connections"
+set firewall name TO-CORE rule 10 action accept
+set firewall name TO-CORE rule 10 state established enable
+set firewall name TO-CORE rule 10 state related enable
+
+
+set firewall name TO-DATACENTER default-action drop
+
+set firewall name TO-DATACENTER rule 41 description "Datacenter Access - Internal DNS"
+set firewall name TO-DATACENTER rule 41 action accept
+set firewall name TO-DATACENTER rule 41 protocol udp
+set firewall name TO-DATACENTER rule 41 destination port 53
+set firewall name TO-DATACENTER rule 41 source group address-group VLAN-USERS
+set firewall name TO-DATACENTER rule 41 destination address 10.100.0.20
+
+set firewall name TO-DATACENTER rule 50 description "Datacenter Access - Databases"
+set firewall name TO-DATACENTER rule 50 action accept
+set firewall name TO-DATACENTER rule 50 protocol tcp
+set firewall name TO-DATACENTER rule 50 destination port 3306
+set firewall name TO-DATACENTER rule 50 source address 10.20.0.0/24
+set firewall name TO-DATACENTER rule 50 destination address 10.100.0.30
+
+set firewall name TO-DATACENTER rule 60 description "ADM ICMP"
+set firewall name TO-DATACENTER rule 60 action accept
+set firewall name TO-DATACENTER rule 60 protocol icmp
+set firewall name TO-DATACENTER rule 60 icmp type 8
+set firewall name TO-DATACENTER rule 60 source address 10.0.1.100
+set firewall name TO-DATACENTER rule 60 destination address 10.0.0.0/24
+
+set firewall name TO-DATACENTER rule 61 description "ADM SSH"
+set firewall name TO-DATACENTER rule 61 action accept
+set firewall name TO-DATACENTER rule 61 protocol tcp
+set firewall name TO-DATACENTER rule 61 destination port 22
+set firewall name TO-DATACENTER rule 61 source address 10.0.1.100
+set firewall name TO-DATACENTER rule 61 destination address 10.0.0.0/24
+
+
+set zone-policy zone CORE from DATACENTER firewall name TO-CORE
+set zone-policy zone DATACENTER from CORE firewall name TO-DATACENTER

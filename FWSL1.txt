@@ -4,3 +4,45 @@ set protocols ospf area 0 network 10.0.0.0/30
 set protocols ospf area 0 network 100.0.0.0/25
 set interfaces loopback lo address 10.0.0.214/32
 set protocols ospf area 0 network 10.0.0.214/32
+
+set zone-policy zone OUTSIDE description "Outside (Internet)"
+set zone-policy zone OUTSIDE interface eth0
+set zone-policy zone INSIDE description "Inside (Internal Network)"
+set zone-policy zone INSIDE interface eth1
+
+set firewall name TO-INSIDE default-action drop
+
+set firewall name TO-INSIDE rule 10 description "Web Access - TCP"
+set firewall name TO-INSIDE rule 10 action accept
+set firewall name TO-INSIDE rule 10 protocol tcp
+set firewall name TO-INSIDE rule 10 destination port '80,443'
+
+set firewall name TO-INSIDE rule 11 description "Web Access - UDP"
+set firewall name TO-INSIDE rule 11 action accept
+set firewall name TO-INSIDE rule 11 protocol udp
+set firewall name TO-INSIDE rule 11 destination port '80,443'
+
+set firewall name TO-INSIDE rule 12 description "E-mail Access"
+set firewall name TO-INSIDE rule 12 action accept
+set firewall name TO-INSIDE rule 12 protocol tcp
+set firewall name TO-INSIDE rule 12 destination port '1993,1025'
+
+set firewall name TO-INSIDE rule 13 description "DNS Access"
+set firewall name TO-INSIDE rule 13 action accept
+set firewall name TO-INSIDE rule 13 protocol udp
+set firewall name TO-INSIDE rule 13 destination port 53
+
+set firewall name TO-INSIDE rule 20 description "Drop Private Range"
+set firewall name TO-INSIDE rule 20 action drop
+set firewall name TO-INSIDE rule 20 source address 10.0.0.0/8
+
+set firewall name TO-INSIDE rule 21 description "Drop Protected Range"
+set firewall name TO-INSIDE rule 21 action drop
+set firewall name TO-INSIDE rule 21 source address 200.0.0.0/24
+
+set firewall name TO-INSIDE rule 22 description 'Drop Multicast Destinations'
+set firewall name TO-INSIDE rule 22 action drop
+set firewall name TO-INSIDE rule 22 destination address 224.0.0.0/4
+
+
+set zone-policy zone INSIDE from OUTSIDE firewall name TO-INSIDE

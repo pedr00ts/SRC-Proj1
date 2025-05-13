@@ -92,6 +92,12 @@ set firewall name TO-DMZ rule 34 state established enable
 set firewall name TO-DMZ rule 34 state related enable
 set firewall name TO-DMZ rule 34 destination address 200.0.0.0/24
 
+set firewall name TO-INSIDE rule 35 description "Limit New Connections Rate"
+set firewall name TO-INSIDE rule 35 action drop
+set firewall name TO-INSIDE rule 35 state new
+set firewall name TO-INSIDE rule 35 recent count 20
+set firewall name TO-INSIDE rule 35 recent time 30
+
 set firewall name TO-DMZ rule 60 description "ADM ICMP"
 set firewall name TO-DMZ rule 60 action accept
 set firewall name TO-DMZ rule 60 protocol icmp
